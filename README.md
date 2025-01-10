@@ -1,107 +1,140 @@
-[![Multi-Modality](agorabanner.png)](https://discord.gg/qUtxnK2NMf)
+# Sun Calculator
 
-# Python Package Template
-A easy, reliable, fluid template for python packages complete with docs, testing suites, readme's, github workflows, linting and much much more
+A Python-based calculator for determining sunrise and sunset times for any location and date, featuring an extensive database of global cities and timezone support. Available in both command-line (CLI) and graphical user interfaces (GUI).
 
+## Features
+
+- Calculate sunrise and sunset times for any global location
+- Extensive database of 32 major cities worldwide with coordinates
+- Timezone support with local time conversion
+- Support for custom coordinates and timezone input
+- UTC time display for all calculations
+- Support for any date input
+- Latitude/longitude validation
+- Simple, user-friendly interfaces
+- Error handling and input validation
 
 ## Installation
 
-You can install the package using pip
-
+1. Clone this repository:
 ```bash
-pip install -e .
-```
-## Structure
-```
-├── LICENSE
-├── Makefile
-├── README.md
-├── agorabanner.png
-├── example.py
-├── package
-│   ├── __init__.py
-│   ├── main.py
-│   └── subfolder
-│       ├── __init__.py
-│       └── main.py
-├── pyproject.toml
-└── requirements.txt
-
-2 directories, 11 files
-```
-# Usage
-
-# Documentation
-
-
-### Code Quality 🧹
-
-We provide two handy commands inside the `Makefile`, namely:
-
-- `make style` to format the code
-- `make check_code_quality` to check code quality (PEP8 basically)
-
-So far, **there is no types checking with mypy**. See [issue](https://github.com/roboflow-ai/template-python/issues/4). 
-
-### Tests 🧪
-
-[`pytests`](https://docs.pytest.org/en/7.1.x/) is used to run our tests.
-
-### Publish on PyPi 🚀
-
-**Important**: Before publishing, edit `__version__` in [src/__init__](/src/__init__.py) to match the wanted new version.
-
-We use [`twine`](https://twine.readthedocs.io/en/stable/) to make our life easier. You can publish by using
-
-```
-export PYPI_USERNAME="you_username"
-export PYPI_PASSWORD="your_password"
-export PYPI_TEST_PASSWORD="your_password_for_test_pypi"
-make publish -e PYPI_USERNAME=$PYPI_USERNAME -e PYPI_PASSWORD=$PYPI_PASSWORD -e PYPI_TEST_PASSWORD=$PYPI_TEST_PASSWORD
+git clone https://github.com/yourusername/suncalcalculator.git
+cd suncalcalculator
 ```
 
-You can also use token for auth, see [pypi doc](https://pypi.org/help/#apitoken). In that case,
-
-```
-export PYPI_USERNAME="__token__"
-export PYPI_PASSWORD="your_token"
-export PYPI_TEST_PASSWORD="your_token_for_test_pypi"
-make publish -e PYPI_USERNAME=$PYPI_USERNAME -e PYPI_PASSWORD=$PYPI_PASSWORD -e PYPI_TEST_PASSWORD=$PYPI_TEST_PASSWORD
+2. Install required dependencies:
+```bash
+pip install -r requirements.txt
 ```
 
-**Note**: We will try to push to [test pypi](https://test.pypi.org/) before pushing to pypi, to assert everything will work
+## Usage
 
-### CI/CD 🤖
+### Command Line Interface (CLI)
 
-We use [GitHub actions](https://github.com/features/actions) to automatically run tests and check code quality when a new PR is done on `main`.
+Run the CLI version:
+```bash
+python sun_calculator_cli.py
+```
 
-On any pull request, we will check the code quality and tests.
+The program will present two options:
 
-When a new release is created, we will try to push the new code to PyPi. We use [`twine`](https://twine.readthedocs.io/en/stable/) to make our life easier. 
+1. Choose from preset cities
+   - Displays a list of available cities with their coordinates and timezones
+   - Simply enter the city name exactly as shown
+   - Times will be displayed in both UTC and the city's local timezone
 
-The **correct steps** to create a new realease are the following:
-- edit `__version__` in [src/__init__](/src/__init__.py) to match the wanted new version.
-- create a new [`tag`](https://git-scm.com/docs/git-tag) with the release name, e.g. `git tag v0.0.1 && git push origin v0.0.1` or from the GitHub UI.
-- create a new release from GitHub UI
+2. Enter custom coordinates
+   - Enter location name
+   - Enter latitude (-90 to 90)
+   - Enter longitude (-180 to 180)
+   - Choose timezone:
+     * Use UTC
+     * Enter custom timezone (e.g., America/New_York, Europe/London)
 
-The CI will run when you create the new release.
+After selecting a location, enter the date:
+- Press Enter for today's date
+- Or enter a specific date in YYYY-MM-DD format (e.g., 2024-01-15)
 
-# Docs
-We use MK docs. This repo comes with the zeta docs. All the docs configurations are already here along with the readthedocs configs
+### Graphical User Interface (GUI)
 
-# Q&A
+If you have a display server available, run the GUI version:
+```bash
+python sun_calculator_gui.py
+```
 
-## Why no cookiecutter?
-This is a template repo, it's meant to be used inside GitHub upon repo creation.
+The GUI provides:
+- Dropdown menu for selecting preset cities
+- Option for custom location input
+- Timezone selection dropdown
+- Input fields for location details
+- Date input field
+- Scrollable list of all available cities with coordinates
+- Results display showing:
+  * Coordinates
+  * UTC times
+  * Local timezone times
 
-## Why reinvent the wheel?
+## Built-in Cities
 
-There are several very good templates on GitHub, I prefer to use code we wrote instead of blinding taking the most starred template and having features we don't need. From experience, it's better to keep it simple and general enough for our specific use cases.
+The calculator includes coordinates and timezone data for 32 major cities worldwide:
 
-# Architecture
+### North America
+- New York, Chicago, Los Angeles
+- Toronto, Vancouver
+- Mexico City
+- San Francisco, Miami
 
-# License
-MIT
+### Europe
+- London, Paris, Berlin
+- Rome, Madrid, Amsterdam
+- Moscow, Stockholm
 
+### Asia
+- Tokyo, Beijing, Singapore
+- Dubai, Hong Kong, Seoul
+- Mumbai, Bangkok
 
+### Australia/Pacific
+- Sydney, Melbourne
+- Auckland, Perth
 
+### South America
+- Rio de Janeiro, Buenos Aires
+- Santiago, Lima
+
+## Timezone Support
+
+- All calculations are performed in UTC
+- Results are displayed in both UTC and local time
+- Support for all IANA timezone database entries
+- Automatic timezone selection for preset cities
+- Custom timezone input for manual coordinates
+
+## Error Messages
+
+The calculator includes validation and will show error messages if:
+- Latitude is not between -90 and 90 degrees
+- Longitude is not between -180 and 180 degrees
+- Date format is incorrect (should be YYYY-MM-DD)
+- Invalid numeric inputs
+- City name not found in database
+- Invalid timezone specified
+
+## Project Structure
+
+- `sun_calculator.py`: Core calculation module using the astral library
+- `cities_db.py`: Database of major cities with coordinates and timezones
+- `sun_calculator_cli.py`: Command-line interface with timezone support
+- `sun_calculator_gui.py`: Graphical interface with timezone selection
+- `requirements.txt`: Required dependencies
+
+## Dependencies
+
+- Python 3.8+
+- astral>=3.2
+- pytz>=2023.3
+- tkinter (included with Python, for GUI version)
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
