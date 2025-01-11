@@ -323,18 +323,29 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 					return m, nil
 				}
 			} else if m.state == stateRangeSelect {
+				var err error
+				baseDate := time.Now()
+				
 				switch msg.String() {
 				case "1":
-					m.dateRange = NewDateRange(time.Now(), RangeThreeDay)
+					m.dateRange, err = NewDateRange(baseDate, RangeThreeDay)
 				case "2":
-					m.dateRange = NewDateRange(time.Now(), RangeWeek)
+					m.dateRange, err = NewDateRange(baseDate, RangeWeek)
 				case "3":
-					m.dateRange = NewDateRange(time.Now(), RangeTwoWeek)
+					m.dateRange, err = NewDateRange(baseDate, RangeTwoWeek)
 				case "4":
-					m.dateRange = NewDateRange(time.Now(), RangeThreeWeek)
+					m.dateRange, err = NewDateRange(baseDate, RangeThreeWeek)
 				case "5":
-					m.dateRange = NewDateRange(time.Now(), RangeMonth)
+					m.dateRange, err = NewDateRange(baseDate, RangeMonth)
+				default:
+					return m, nil
 				}
+
+				if err != nil {
+					m.err = err
+					return m, nil
+				}
+
 				m.state = stateCalculating
 				return m, tea.Batch(
 					calculateSunTimes(m),
@@ -586,7 +597,16 @@ func (m model) View() string {
 	}
 
 	if m.err != nil {
-		s += "\n\n" + m.styles.error.Render(m.err.Error())
+		errorMsg := m.err.Error()
+		// Capitalize first letter if not already capitalized
+		if len(errorMsg) > 0 && errorMsg[0] >= 'a' && errorMsg[0] <= 'z' {
+			errorMsg = string(errorMsg[0]-32) + errorMsg[1:]
+		}
+		// Add period if missing
+		if len(errorMsg) > 0 && !strings.HasSuffix(errorMsg, ".") {
+			errorMsg += "."
+		}
+		s += "\n\n" + m.styles.error.Render("⚠ " + errorMsg)
 	}
 
 	return s

@@ -92,13 +92,15 @@ func (dr DateRange) DaysInRange() int {
 	return int(dr.End.Sub(dr.Start).Hours()/24) + 1
 }
 
-// NextRange returns a new range of the same type starting from the end of this range
-func (dr DateRange) NextRange() DateRange {
+// NextRange returns a new range of the same type starting from the end of this range.
+// Returns an error if the new range would exceed allowed limits.
+func (dr DateRange) NextRange() (DateRange, error) {
 	return NewDateRange(dr.End.AddDate(0, 0, 1), dr.RangeType)
 }
 
-// PrevRange returns a new range of the same type ending at the start of this range
-func (dr DateRange) PrevRange() DateRange {
+// PrevRange returns a new range of the same type ending at the start of this range.
+// Returns an error if the new range would exceed allowed limits.
+func (dr DateRange) PrevRange() (DateRange, error) {
 	var start time.Time
 	switch dr.RangeType {
 	case RangeThreeDay:
